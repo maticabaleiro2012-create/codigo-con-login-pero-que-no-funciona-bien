@@ -14,6 +14,7 @@ app.use(express.static('public'));
 // Configuración de sesiones
 // NOTA DE SEGURIDAD: En producción, usar variables de entorno para el secret
 // y configurar cookie.secure = true para HTTPS
+// IMPORTANTE: Implementar protección CSRF usando csurf middleware en producción
 app.use(session({
   secret: process.env.SESSION_SECRET || 'mi-secreto-super-seguro-123',
   resave: false,

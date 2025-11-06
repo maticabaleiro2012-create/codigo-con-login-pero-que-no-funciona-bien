@@ -75,7 +75,8 @@ La aplicación estará disponible en `http://localhost:3000`
 4. **HTTPS**: Habilitar `cookie.secure = true` y usar HTTPS en producción
 5. **Validación**: Implementar validación más robusta de entrada de usuario
 6. **Rate limiting**: Agregar limitación de intentos de login para prevenir ataques de fuerza bruta
-7. **CSRF Protection**: Implementar tokens CSRF para proteger formularios
+7. **CSRF Protection**: Implementar tokens CSRF usando el middleware `csurf` para proteger formularios contra ataques Cross-Site Request Forgery
+8. **Input sanitization**: Sanitizar y validar todas las entradas del usuario para prevenir inyección de código
 
 ## 📦 Dependencias
 
