@@ -12,13 +12,15 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 // Configuración de sesiones
+// NOTA DE SEGURIDAD: En producción, usar variables de entorno para el secret
+// y configurar cookie.secure = true para HTTPS
 app.use(session({
-  secret: 'mi-secreto-super-seguro-123',
+  secret: process.env.SESSION_SECRET || 'mi-secreto-super-seguro-123',
   resave: false,
   saveUninitialized: false,
   cookie: { 
     maxAge: 3600000, // 1 hora
-    secure: false 
+    secure: process.env.NODE_ENV === 'production' // true en producción con HTTPS
   }
 }));
 
@@ -27,6 +29,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Base de datos simulada de usuarios (en producción usar una BD real)
+// NOTA DE SEGURIDAD: En producción, las contraseñas deben estar hasheadas con bcrypt
+// y almacenadas en una base de datos segura
 const usuarios = {
   'admin': { password: 'admin123', nombre: 'Administrador' },
   'usuario': { password: 'usuario123', nombre: 'Usuario Demo' }
@@ -64,6 +68,8 @@ app.post('/login', (req, res) => {
   const { username, password } = req.body;
   
   // Validar credenciales
+  // NOTA DE SEGURIDAD: En producción, usar bcrypt.compare() para comparación segura
+  // de contraseñas hasheadas y evitar ataques de timing
   if (usuarios[username] && usuarios[username].password === password) {
     // Login exitoso
     req.session.usuario = {
