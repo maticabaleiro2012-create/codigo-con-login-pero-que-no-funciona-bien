@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Tareas - Mi Aplicación</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .header h1 {
+      font-size: 24px;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .logout-btn, .back-btn {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 8px 16px;
+      border: 2px solid white;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+    
+    .logout-btn:hover, .back-btn:hover {
+      background: white;
+      color: #667eea;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    
+    .tasks-card {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .tasks-card h2 {
+      color: #333;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 28px;
+    }
+    
+    .add-task-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+    
+    .add-task-form input {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #e1e1e1;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    
+    .add-task-form input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .add-task-form button {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .add-task-form button:hover {
+      transform: translateY(-2px);
+    }
+    
+    .tasks-list {
+      list-style: none;
+    }
+    
+    .task-item {
+      background: #f9f9f9;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+    
+    .task-item:hover {
+      background: #f0f0f0;
+    }
+    
+    .task-text {
+      flex: 1;
+      color: #333;
+      font-size: 16px;
+    }
+    
+    .delete-btn {
+      background: #f44336;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    
+    .delete-btn:hover {
+      background: #d32f2f;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+    
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-content">
+      <h1>📝 Lista de Tareas</h1>
+      <div class="user-info">
+        <a href="/dashboard" class="back-btn">← Volver</a>
+        <span>👤 <%= usuario.nombre %></span>
+        <a href="/logout" class="logout-btn">Cerrar Sesión</a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="tasks-card">
+      <h2>Mis Tareas</h2>
+      
+      <form method="POST" action="/api/tareas" class="add-task-form">
+        <input type="text" name="tarea" placeholder="Escribe una nueva tarea..." required>
+        <button type="submit">➕ Agregar</button>
+      </form>
+      
+      <% if (tareas.length === 0) { %>
+        <div class="empty-state">
+          <div class="empty-state-icon">📋</div>
+          <p>No hay tareas aún. ¡Agrega tu primera tarea!</p>
+        </div>
+      <% } else { %>
+        <ul class="tasks-list">
+          <% tareas.forEach(tarea => { %>
+            <li class="task-item">
+              <span class="task-text"><%= tarea.texto %></span>
+              <form method="POST" action="/api/tareas/eliminar" style="display: inline;">
+                <input type="hidden" name="id" value="<%= tarea.id %>">
+                <button type="submit" class="delete-btn">🗑️ Eliminar</button>
+              </form>
+            </li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>
